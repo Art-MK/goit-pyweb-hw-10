@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quotes to Scrape</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .quote { margin-bottom: 20px; padding: 20px; border: 1px solid #ddd; border-radius: 5px; background-color: #f8f9fa; }
+        .tags { margin-top: 10px; }
+        .tag { margin-right: 5px; }
+        .header-buttons { margin: 20px 0; text-align: center; }
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        function filterQuotes() {
+    const query = document.getElementById('tagFilter').value.toLowerCase().trim();
+    $.ajax({
+        url: "{% url 'search_quotes' %}",
+        data: { 'query': query },
+        success: function(data) {
+            const quotesContainer = document.getElementById('quotesContainer');
+            quotesContainer.innerHTML = '';
+            data.forEach(quote => {
+                const quoteElement = `<div class="quote">
+                    <p class="text">“${quote.text}”</p>
+                    <p>by <strong class="author">${quote.author}</strong></p>
+                    <div class="tags">Tags: ${quote.tags.map(tag => `<span class="badge badge-secondary">${tag}</span>`).join(' ')}</div>
+                </div>`;
+                quotesContainer.innerHTML += quoteElement;
+            });
+        }
+    });
+}
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div class="row header-box">
+            <div class="col-md-12">
+                <h1 class="text-center"><a href="/" style="text-decoration: none">Quotes to Scrape</a></h1>
+                {% if user.is_authenticated %}
+                    <div class="header-buttons">
+                        <a href="{% url 'add_author' %}" class="btn btn-outline-secondary">Add Author</a>
+                        <a href="{% url 'add_quote' %}" class="btn btn-outline-secondary">Add Quote</a>
+                    </div>
+                {% endif %}
+            </div>
+            <div class="col-md-12 text-right">
+                {% if user.is_authenticated %}
+                    <form method="POST" action="{% url 'logout' %}" class="d-inline">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-outline-secondary">Logout</button>
+                    </form>
+                    <a href="{% url 'admin:index' %}" class="btn btn-outline-secondary">Admin Panel</a>
+                    <div class="mt-2">
+                        <form method="POST" action="{% url 'scrape' %}" class="d-inline">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-primary">ScrapeData from quotes.toscrape.com</button>
+                        </form>
+                    </div>
+                {% else %}
+                    <a href="{% url 'login' %}" class="btn btn-outline-secondary">Login</a>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="tagFilter">Filter by tag:</label>
+            <input type="text" id="tagFilter" class="form-control" onkeyup="filterQuotes()" placeholder="Start typing a tag...">
+        </div>
+
+        <div class="row">
+            <div class="col-md-8" id="quotesContainer">
+                {% for quote in quotes %}
+                    <div class="quote">
+                        <p class="text">“{{ quote.text }}”</p>
+                        <p>by <strong class="author">{{ quote.author.fullname }}</strong> <a href="{% url 'author_detail' quote.author.id %}">(about)</a></p>
+                        <div class="tags">
+                            Tags: {% for tag in quote.tags %}
+                                <a class="tag btn btn-light btn-sm" href="{% url 'quotes_by_tag' tag %}">{{ tag }}</a>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="col-md-4">
+                <h2>Top Ten Tags</h2>
+                <ul class="list-group">
+                    {% for tag in top_ten_tags %}
+                        <li class="list-group-item">
+                            <a class="tag" href="{% url 'quotes_by_tag' tag %}">{{ tag }}</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer mt-5">
+        <div class="container">
+            <p class="text-muted">Quotes by: <a href="https://www.goodreads.com/quotes">GoodReads.com</a></p>
+            <p class="copyright">Made with ❤ by Glinskiy Artem as homework for GoIT</a></p>
+        </div>
+    </footer>
+</body>
+</html>

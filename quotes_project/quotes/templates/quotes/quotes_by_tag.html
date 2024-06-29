@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quotes for {{ tag }}</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Quotes for "{{ tag }}"</h1>
+        {% for quote in quotes %}
+            <div class="quote">
+                <p class="text">“{{ quote.text }}”</p>
+                <p>by <strong class="author">{{ quote.author.fullname }}</strong> <a href="{% url 'author_detail' quote.author.id %}">(about)</a></p>
+                <div class="tags">
+                    Tags: {% for tag in quote.tags %}
+                        <a class="tag btn btn-light btn-sm" href="{% url 'quotes_by_tag' tag %}">{{ tag }}</a>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endfor %}
+
+        <nav>
+            <ul class="pagination">
+                {% if quotes.has_previous %}
+                    <li class="page-item"><a class="page-link" href="?page={{ quotes.previous_page_number }}">Previous</a></li>
+                {% endif %}
+                {% if quotes.has_next %}
+                    <li class="page-item"><a class="page-link" href="?page={{ quotes.next_page_number }}">Next</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+</body>
+</html>

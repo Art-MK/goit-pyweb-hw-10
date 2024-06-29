@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .container { margin-top: 40px; max-width: 400px; }
+        .form-group { margin-bottom: 15px; }
+        .btn-container { text-align: center; margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-center">Login</h1>
+        <form method="POST">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="id_username">Username</label>
+                <input type="text" name="username" id="id_username" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="id_password">Password</label>
+                <input type="password" name="password" id="id_password" class="form-control" required>
+            </div>
+            <div class="btn-container">
+                <button type="submit" class="btn btn-primary">Login</button>
+                <a href="{% url 'index' %}" class="btn btn-secondary">Close</a>
+            </div>
+        </form>
+    </div>
+    <footer class="footer mt-5">
+        <div class="text-center">
+            <p class="copyright">Made with ❤ by Glinskiy Artem</a></p>
+        </div>
+    </footer>
+</body>
+</html>
