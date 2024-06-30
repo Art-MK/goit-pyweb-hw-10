@@ -1,0 +1,7 @@
+{
+    "provider": "google",
+    "name": "Google",
+    "client_id": "1xxxxxxxxxxxxxxxxxxxxxxxxxxx.apps.googleusercontent.com",
+    "secret": "GOCSPX-9xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+    "sites": [1]
+}
