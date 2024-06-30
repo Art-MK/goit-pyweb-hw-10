@@ -6,6 +6,7 @@ password="admin"
 
 docker compose up -d
 
+python ./$project_name/manage.py load_social_app
 python ./$project_name/manage.py makemigrations
 python ./$project_name/manage.py migrate
 
