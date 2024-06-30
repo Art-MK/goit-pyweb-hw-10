@@ -14,6 +14,7 @@
 <body>
     <div class="container">
         <h1 class="text-center">Login</h1>
+        {% load socialaccount %}
         <form method="POST">
             {% csrf_token %}
             <div class="form-group">
@@ -27,12 +28,13 @@
             <div class="btn-container">
                 <button type="submit" class="btn btn-primary">Login</button>
                 <a href="{% url 'index' %}" class="btn btn-secondary">Close</a>
+                <a href="{% provider_login_url 'google' %}" class="btn btn-outline-secondary">Sign up with Google</a>
             </div>
         </form>
     </div>
     <footer class="footer mt-5">
         <div class="text-center">
-            <p class="copyright">Made with ❤ by Glinskiy Artem</a></p>
+            <p class="copyright">Made with ❤ by Glinskiy Artem</p>
         </div>
     </footer>
 </body>
